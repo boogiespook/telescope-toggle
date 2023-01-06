@@ -14,7 +14,13 @@
     <body>
 <form action="tmp.php">
 <?php
-$db_connection = pg_connect("dbname=telescope user=postgres password=XXXXX");
+#$db_connection = pg_connect("host=postgresql port=5432  dbname=telescope user=telescope password=XXXXX");
+$pg_host = getenv('PG_HOST');
+$pg_db = getenv('PG_DATABASE');
+$pg_user = getenv('PG_USER');
+$pg_passwd = getenv('PG_PASSWORD');
+
+$db_connection = pg_connect("host=$pg_host port=5432  dbname=$pg_db user=$pg_user password=$pg_passwd");
 
 function putToggles($domain) {
 $qq = "select capability.id as id, capability.description as capability, flag.description as flag from capability,flag where domain_id = $domain and capability.flag_id = flag.id;";

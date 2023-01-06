@@ -1,5 +1,12 @@
 <?php
-$db_connection = pg_connect("dbname=telescope user=postgres password=XXXXX");
+#$db_connection = pg_connect("host=postgresql port=5432  dbname=telescope user=telescope password=HslqN7SV1Foh4wb1EPAr");
+
+$pg_host = getenv('PG_HOST');
+$pg_db = getenv('PG_DATABASE');
+$pg_user = getenv('PG_USER');
+$pg_passwd = getenv('PG_PASSWORD');
+
+$db_connection = pg_connect("host=$pg_host port=5432  dbname=$pg_db user=$pg_user password=$pg_passwd");
 
 foreach($_REQUEST as $key => $val) {
 if ($val == "1") {
