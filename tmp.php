@@ -1,6 +1,4 @@
 <?php
-#$db_connection = pg_connect("host=postgresql port=5432  dbname=telescope user=telescope password=HslqN7SV1Foh4wb1EPAr");
-
 $pg_host = getenv('PG_HOST');
 $pg_db = getenv('PG_DATABASE');
 $pg_user = getenv('PG_USER');
