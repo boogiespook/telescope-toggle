@@ -1,12 +1,3 @@
-#FROM registry.access.redhat.com/ubi8/php-74
-#
-#EXPOSE 8080
-## Install postgres
-#USER 0
-#RUN dnf install -y php-pgsql
-#USER 1001
-#
-#COPY . /var/www/html
 FROM registry.redhat.io/rhel9/php-80@sha256:53a15af962ea77a2d6c6b1627195e40083c926effe041b897f867299b42f62bb 
 MAINTAINER Chris Jenkins "chrisj@redhat.com"
 EXPOSE 8080
