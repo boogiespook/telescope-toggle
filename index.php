@@ -14,6 +14,8 @@
     <body>
 <form action="tmp.php">
 <?php
+
+
 $pg_host = getenv('PG_HOST');
 $pg_db = getenv('PG_DATABASE');
 $pg_user = getenv('PG_USER');
@@ -61,7 +63,7 @@ print '          	<li>' . $row['capability'] . '</li>
                
               </header>
   <div class="pf-c-page__sidebar">
-    <!-- <div class="pf-c-page__sidebar-body">
+     <div class="pf-c-page__sidebar-body">
       <nav
         class="pf-c-nav"
         id="card-view-example-primary-nav"
@@ -70,21 +72,18 @@ print '          	<li>' . $row['capability'] . '</li>
         <ul class="pf-c-nav__list">
           <li class="pf-c-nav__item">
             <a
-              href="#" class="pf-c-nav__link pf-m-current" aria-current="page" >Operator Lens</a>
+              href="#toggle" class="pf-c-nav__link pf-m-current" aria-current="page" >Telescope Toggle</a>
           </li>
           <li class="pf-c-nav__item">
-            <a href="#" class="pf-c-nav__link">Owner Lens</a>
-          </li>
-          <li class="pf-c-nav__item">
-            <a href="#" class="pf-c-nav__link">Executive Lens</a>
+            <a href="#integrations" class="pf-c-nav__link">Integrations</a>
           </li>
         </ul>
       </nav>
-    </div> -->
+    </div>
   </div>
-<form class="pf-c-form" action="tmp.php" novalidate>
+<form id="toggle" class="pf-c-form" action="tmp.php" novalidate>
     <section class="pf-c-page__main-section pf-m-fill">
-    <p class="pf-global--FontSize--2xl">Telescope Toggle</p>
+    <p class="pf-c-title pf-m-3xl">Telescope Toggle</p>
       <div class="pf-l-gallery pf-m-gutter">
  
 
@@ -205,8 +204,193 @@ print '          	<li>' . $row['capability'] . '</li>
     </div>
   </div>        
 </form>              
-    </section>
+</div>
+<br>
+<hr>
 
+    <p id="integrations" class="pf-c-title pf-m-2xl">Current Integrations</p>
+<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="This is a sortable table example" id="table-sortable">
+  <thead>
+    <tr role="row">
+      <th class="pf-c-table__sort pf-m-selected " role="columnheader" aria-sort="ascending" scope="col">
+        <button class="pf-c-table__button">
+          <div class="pf-c-table__button-content">
+            <span class="pf-c-table__text">Capability</span>
+            <span class="pf-c-table__sort-indicator">
+              <i class="fas fa-long-arrow-alt-up"></i>
+            </span>
+          </div>
+        </button>
+      </th>
+      <th class="pf-c-table__sort pf-m-help " role="columnheader" aria-sort="none" scope="col">
+        <div class="pf-c-table__column-help">
+          <button class="pf-c-table__button">
+            <div class="pf-c-table__button-content">
+              <span class="pf-c-table__text">Integration Name</span>
+              <span class="pf-c-table__sort-indicator">
+                <i class="fas fa-arrows-alt-v"></i>
+              </span>
+            </div>
+          </button>
+          <span class="pf-c-table__column-help-action">
+          </span>
+        </div>
+      </th>
+<th class="pf-c-table__sort pf-m-help " role="columnheader" aria-sort="none" scope="col">
+        <div class="pf-c-table__column-help">
+          <button class="pf-c-table__button">
+            <div class="pf-c-table__button-content">
+              <span class="pf-c-table__text">Last Update</span>
+              <span class="pf-c-table__sort-indicator">
+                <i class="fas fa-arrows-alt-v"></i>
+              </span>
+            </div>
+          </button>
+          <span class="pf-c-table__column-help-action">
+          </span>
+        </div>
+      </th>      
+      
+    </tr>
+  </thead>
+  <tbody role="rowgroup">
+<?php
+$qq = "SELECT capability.description as capability , integrations.integration_name as integration, integrations.last_update as updated from capability,integrations WHERE integrations.capability_id = capability.id";
+$result = pg_query($qq) or die('Error message: ' . pg_last_error());
+while ($row = pg_fetch_assoc($result)) {
+print '
+    <tr role="row">
+      <td role="cell" data-label="Capability">' . $row['capability'] . '</td>
+      <td role="cell" data-label="Integration">' . $row['integration'] . '</td>
+      <td role="cell" data-label="updated">' . $row['updated'] . '</td>
+    </tr>
+';
+}
+?>
+  </tbody>
+</table>
+<br>
+    <p id="integrations" class="pf-c-title pf-m-2xl">Add Integration</p>
+
+<form novalidate class="pf-c-form pf-m-horizontal" action="addIntegration.php">
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="horizontal-form-name">
+        <span class="pf-c-form__label-text">Integration Name</span>
+        <span class="pf-c-form__label-required" aria-hidden="true">&#42;</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <input class="pf-c-form-control" required type="text" id="integration-name" name="integration-name" aria-describedby="horizontal-form-name-helper2" />
+    </div>
+  </div>
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="endpoint-url">
+        <span class="pf-c-form__label-text">URL endpoint</span>
+        <span class="pf-c-form__label-required" aria-hidden="true">&#42;</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <input class="pf-c-form-control" type="text" id="endpoint-url" name="endpoint-url" />
+    </div>
+  </div>
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="capability-id">
+        <span class="pf-c-form__label-text">Capability</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <select class="pf-c-form-control" id="capability-id" name="capability-id">
+      <?php
+      $qq = "select domain.description as domain, capability.description as capability, capability.id as capabilityId from domain,capability where domain.id = capability.domain_id;";
+$result = pg_query($qq) or die('Error message: ' . pg_last_error());
+while ($row = pg_fetch_assoc($result)) {
+$str = $row['domain'] . " - " . $row['capability'];
+print '
+<option value="' . $row['capabilityid'] . '">' . $str . '</option>
+';		
+}
+      ?>
+<!--         <option selected>Please choose</option>
+        <option value="Mr">Mr</option>
+        <option value="Miss">Miss</option>
+        <option value="Mrs">Mrs</option>
+        <option value="Ms">Ms</option>
+        <option value="Dr">Dr</option>
+        <option value="Other">Other</option>
+ -->      </select>
+    </div>
+  </div>
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="username">
+        <span class="pf-c-form__label-text">Username</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <input class="pf-c-form-control" type="text" id="username" name="username" />
+    </div>
+  </div>
+
+ <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="password">
+        <span class="pf-c-form__label-text">Password</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <input class="pf-c-form-control" type="text" id="password" name="password" />
+    </div>
+  </div> 
+ 
+<div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="token">
+        <span class="pf-c-form__label-text">Token</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+<textarea class="pf-c-form-control" name="token" id="token"></textarea>    </div>
+  </div>  
+
+ <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="success-criteria">
+        <span class="pf-c-form__label-text">Success Criteria</span>
+      </label>
+    </div>
+    <p
+          class="pf-c-form__helper-text"
+          id="form-demo-grid-name-helper"
+          aria-live="polite"
+        >Success criteria depends on the specific integration. For example it could be a number or true/false</p>
+    <div class="pf-c-form__group-control">
+      <input class="pf-c-form-control" type="text" id="success-criteria" name="success-criteria" />
+    </div>
+  </div> 
+  
+<!--   <div class="pf-c-form__group">
+    <div class="pf-c-form__group-control">
+      <div class="pf-c-check">
+        <input class="pf-c-check__input" type="checkbox" type="checkbox" id="alt-form-checkbox1" name="alt-form-checkbox1" />
+        <label class="pf-c-check__label" for="alt-form-checkbox1">Follow up via email</label>
+      </div>
+    </div>
+  </div> -->
+ 
+  <div class="pf-c-form__group pf-m-action">
+    <div class="pf-c-form__group-control">
+      <div class="pf-c-form__actions">
+        <button class="pf-c-button pf-m-primary" type="submit">Add Integration</button>
+        <button class="pf-c-button pf-m-secondary" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+</form>
+  
+    </section>
     <section class="pf-c-page__main-section pf-m-no-padding pf-m-light pf-m-sticky-bottom pf-m-no-fill">
      
     </section>
