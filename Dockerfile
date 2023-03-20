@@ -1,5 +1,4 @@
 FROM registry.access.redhat.com/ubi9/php-80:1-61
->>>>>>> 5256b94 (Src image changed)
 MAINTAINER Chris Jenkins "chrisj@redhat.com"
 ## Install postgres
 USER 0
