@@ -67,6 +67,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: "./Containerfile"
           push: ${{ steps.set-workflow-variables.outputs.push_event == 'true' }}
           tags: "${{ steps.set-workflow-variables.outputs.image }}:latest,${{ steps.set-workflow-variables.outputs.image }}:${{ steps.set-workflow-variables.outputs.image_version }}"
