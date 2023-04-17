@@ -300,6 +300,7 @@ print '
   </tbody>
 </table>
 <br>
+<!--  Start of Add Integrations -->
     <p id="integrations" class="pf-c-title pf-m-2xl">Add Integration</p>
 
 <form novalidate class="pf-c-form pf-m-horizontal" action="addIntegration.php">
@@ -362,7 +363,10 @@ print '
 <option value="' . $row['id'] . '">' . $row['integration_method_name'] . '</option>
 ';		
 }
+
+    
       ?>
+
      </select>
     </div>
   </div>
@@ -423,17 +427,45 @@ print '
       </div>
     </div>
   </div> -->
- 
-  <div class="pf-c-form__group pf-m-action">
-    <div class="pf-c-form__group-control">
-      <div class="pf-c-form__actions">
-        <button class="pf-c-button pf-m-primary" type="submit">Add Integration</button>
+   <div class="pf-c-form__group pf-m-action">
+    <div class="pf-c-form__actions">
+      <button class="pf-c-button pf-m-primary" type="submit">Add Integration</button>
+    </div>
+  </div>  
+</form>
+<!--  End of Add Integrations -->  
 
-      </div>
+
+
+
+<!--  Start of Add Integration Methods -->  
+<br>
+<hr>
+<br>
+<form novalidate class="pf-c-form pf-m-horizontal" action="addIntegrationMethod.php">
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="horizontal-form-name">
+        <span class="pf-c-form__label-text">Integration Method Name</span>
+        <span class="pf-c-form__label-required" aria-hidden="true">&#42;</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <input class="pf-c-form-control" required type="text" id="integration_method" name="integration_method" aria-describedby="horizontal-form-name-helper2" />
     </div>
   </div>
-</form>
   
+     <div class="pf-c-form__group pf-m-action">
+    <div class="pf-c-form__actions">
+      <button class="pf-c-button pf-m-primary" type="submit">Add Integration Method</button>
+    </div>
+  </div>  
+  </form>
+  <!--  End of Add Integrations Methods -->  
+
+
+
+
     </section>
     <section class="pf-c-page__main-section pf-m-no-padding pf-m-light pf-m-sticky-bottom pf-m-no-fill">
      
