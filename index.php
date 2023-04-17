@@ -442,6 +442,7 @@ print '
 <br>
 <hr>
 <br>
+    <p id="integrations" class="pf-c-title pf-m-2xl">Add Integration Method</p>
 <form novalidate class="pf-c-form pf-m-horizontal" action="addIntegrationMethod.php">
   <div class="pf-c-form__group">
     <div class="pf-c-form__group-label">
