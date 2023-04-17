@@ -15,7 +15,6 @@
 <form action="tmp.php">
 <?php
 
-
 $pg_host = getenv('PG_HOST');
 $pg_db = getenv('PG_DATABASE');
 $pg_user = getenv('PG_USER');
@@ -240,6 +239,20 @@ print '          	<li>' . $row['capability'] . '</li>
         <div class="pf-c-table__column-help">
           <button class="pf-c-table__button">
             <div class="pf-c-table__button-content">
+              <span class="pf-c-table__text">Success Criteria</span>
+              <span class="pf-c-table__sort-indicator">
+                <i class="fas fa-arrows-alt-v"></i>
+              </span>
+            </div>
+          </button>
+          <span class="pf-c-table__column-help-action">
+          </span>
+        </div>
+      </th>
+<th class="pf-c-table__sort pf-m-help " role="columnheader" aria-sort="none" scope="col">
+        <div class="pf-c-table__column-help">
+          <button class="pf-c-table__button">
+            <div class="pf-c-table__button-content">
               <span class="pf-c-table__text">Last Update</span>
               <span class="pf-c-table__sort-indicator">
                 <i class="fas fa-arrows-alt-v"></i>
@@ -250,18 +263,35 @@ print '          	<li>' . $row['capability'] . '</li>
           </span>
         </div>
       </th>      
-      
+
+ <th class="pf-c-table__sort pf-m-help " role="columnheader" aria-sort="none" scope="col">
+        <div class="pf-c-table__column-help">
+          <button class="pf-c-table__button">
+            <div class="pf-c-table__button-content">
+              <span class="pf-c-table__text"></span>
+            </div>
+          </button>
+          <span class="pf-c-table__column-help-action">
+          </span>
+        </div>
+      </th>        
     </tr>
   </thead>
   <tbody role="rowgroup">
 <?php
-$qq = "SELECT capability.description as capability , integrations.integration_name as integration, integrations.last_update as updated from capability,integrations WHERE integrations.capability_id = capability.id";
+$qq = "SELECT capability.description as capability , integrations.integration_name as integration, integrations.last_update as updated, success_criteria from capability,integrations WHERE integrations.capability_id = capability.id";
 $result = pg_query($qq) or die('Error message: ' . pg_last_error());
+
+## Add to table
+##       <td role="cell" data-label="updated"><button class="pf-c-button pf-m-primary pf-m-small" type="button">Run Integration</button></td>
+
+
 while ($row = pg_fetch_assoc($result)) {
 print '
     <tr role="row">
       <td role="cell" data-label="Capability">' . $row['capability'] . '</td>
       <td role="cell" data-label="Integration">' . $row['integration'] . '</td>
+      <td role="cell" data-label="Success Criteria">' . $row['success_criteria'] . '</td>
       <td role="cell" data-label="updated">' . $row['updated'] . '</td>
     </tr>
 ';
@@ -270,6 +300,7 @@ print '
   </tbody>
 </table>
 <br>
+<!--  Start of Add Integrations -->
     <p id="integrations" class="pf-c-title pf-m-2xl">Add Integration</p>
 
 <form novalidate class="pf-c-form pf-m-horizontal" action="addIntegration.php">
@@ -313,16 +344,33 @@ print '
 ';		
 }
       ?>
-<!--         <option selected>Please choose</option>
-        <option value="Mr">Mr</option>
-        <option value="Miss">Miss</option>
-        <option value="Mrs">Mrs</option>
-        <option value="Ms">Ms</option>
-        <option value="Dr">Dr</option>
-        <option value="Other">Other</option>
- -->      </select>
+     </select>
     </div>
   </div>
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="integration_method_id">
+        <span class="pf-c-form__label-text">Integration Method</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <select class="pf-c-form-control" id="integration_method_id" name="integration_method_id">
+      <?php
+      $qq = "select integration_method_name, id from integration_methods;";
+$result = pg_query($qq) or die('Error message: ' . pg_last_error());
+while ($row = pg_fetch_assoc($result)) {
+print '
+<option value="' . $row['id'] . '">' . $row['integration_method_name'] . '</option>
+';		
+}
+
+    
+      ?>
+
+     </select>
+    </div>
+  </div>
+
   <div class="pf-c-form__group">
     <div class="pf-c-form__group-label">
       <label class="pf-c-form__label" for="username">
@@ -365,7 +413,7 @@ print '
           class="pf-c-form__helper-text"
           id="form-demo-grid-name-helper"
           aria-live="polite"
-        >Success criteria depends on the specific integration. For example it could be a number or true/false</p>
+        >Success criteria depends on the specific integration. For example it could be a number (such as a %) or boolean (true/false, yes/no)</p>
     <div class="pf-c-form__group-control">
       <input class="pf-c-form-control" type="text" id="success-criteria" name="success-criteria" />
     </div>
@@ -379,17 +427,46 @@ print '
       </div>
     </div>
   </div> -->
- 
-  <div class="pf-c-form__group pf-m-action">
+   <div class="pf-c-form__group pf-m-action">
+    <div class="pf-c-form__actions">
+      <button class="pf-c-button pf-m-primary" type="submit">Add Integration</button>
+    </div>
+  </div>  
+</form>
+<!--  End of Add Integrations -->  
+
+
+
+
+<!--  Start of Add Integration Methods -->  
+<br>
+<hr>
+<br>
+    <p id="integrations" class="pf-c-title pf-m-2xl">Add Integration Method</p>
+<form novalidate class="pf-c-form pf-m-horizontal" action="addIntegrationMethod.php">
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="horizontal-form-name">
+        <span class="pf-c-form__label-text">Integration Method Name</span>
+        <span class="pf-c-form__label-required" aria-hidden="true">&#42;</span>
+      </label>
+    </div>
     <div class="pf-c-form__group-control">
-      <div class="pf-c-form__actions">
-        <button class="pf-c-button pf-m-primary" type="submit">Add Integration</button>
-        <button class="pf-c-button pf-m-secondary" type="button">Cancel</button>
-      </div>
+      <input class="pf-c-form-control" required type="text" id="integration_method" name="integration_method" aria-describedby="horizontal-form-name-helper2" />
     </div>
   </div>
-</form>
   
+     <div class="pf-c-form__group pf-m-action">
+    <div class="pf-c-form__actions">
+      <button class="pf-c-button pf-m-primary" type="submit">Add Integration Method</button>
+    </div>
+  </div>  
+  </form>
+  <!--  End of Add Integrations Methods -->  
+
+
+
+
     </section>
     <section class="pf-c-page__main-section pf-m-no-padding pf-m-light pf-m-sticky-bottom pf-m-no-fill">
      
