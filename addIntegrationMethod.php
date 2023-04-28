@@ -1,5 +1,4 @@
 <?php
-
 $pg_host = getenv('PG_HOST');
 $pg_db = getenv('PG_DATABASE');
 $pg_user = getenv('PG_USER');

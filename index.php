@@ -380,8 +380,32 @@ print '
 }
       ?>
      </select>
+
     </div>
   </div>
+  <div class="pf-c-form__group">
+    <div class="pf-c-form__group-label">
+      <label class="pf-c-form__label" for="integration_method_id">
+        <span class="pf-c-form__label-text">Integration Method</span>
+      </label>
+    </div>
+    <div class="pf-c-form__group-control">
+      <select class="pf-c-form-control" id="integration_method_id" name="integration_method_id">
+      <?php
+      $qq = "select integration_method_name, id from integration_methods;";
+$result = pg_query($qq) or die('Error message: ' . pg_last_error());
+while ($row = pg_fetch_assoc($result)) {
+print '
+<option value="' . $row['id'] . '">' . $row['integration_method_name'] . '</option>
+';		
+}
+
+      ?>
+
+     </select>
+    </div>
+  </div>
+
   <div class="pf-c-form__group">
     <div class="pf-c-form__group-label">
       <label class="pf-c-form__label" for="integration_method_id">
@@ -467,10 +491,7 @@ print '
       <button class="pf-c-button pf-m-primary" type="submit">Add Integration</button>
     </div>
   </div>  
-</div>
-</form>
-    </section>
-<!--  End of Add Integrations -->  
+
 
 <!--  Start of Add Integration Methods -->  
     <section id="methods" class="tab-panel">
@@ -496,23 +517,6 @@ print '
   </div>  
   </form>
   <!--  End of Add Integrations Methods -->  
- </section>
-
-
-   
-</div>
-</div>
-
-
-      
-
-
-
-
-
-
-
-
 
     </section>
 
