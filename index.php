@@ -59,11 +59,13 @@ $greenTotal = pg_query($greenCount) or die('Error message: ' . pg_last_error());
 $greens = pg_fetch_assoc($greenTotal);
 $totalGreens = $greens['totalgreen'];
 
+$percentComplete = ($totalGreens / $totalCapabilities) * 100;
+
 # If greens < total, add red aperture
 if ($totalGreens < $totalCapabilities) {
-print "<img src=images/aperture-red-closed.png>";
+print "<img src=images/aperture-red-closed.png title='" . round($percentComplete) . "% Compliant'>";
 } else {
-print "<img src=images/aperture-green.png>";
+print "<img src=images/aperture-green.png title='" . round($percentComplete) . "% Compliant'>";
 }
 
 }
@@ -87,12 +89,12 @@ print '
 
 
 function putToggleItems() {
-$selectDomains = "select * from domain;";
+$selectDomains = "select * from domain ORDER by description;";
 $domainResults = pg_query($selectDomains) or die('Error message: ' . pg_last_error());
 $i = 1; 
 while ($row = pg_fetch_assoc($domainResults)) {
 print '
-<div class="pf-c-card pf-m-selectable-raised pf-m-compact" id="card-' . $i . '">
+<div class="pf-c-card pf-m-selectable-raised pf-m-rounded" id="card-' . $i . '">
           <div class="pf-c-card__title">
             <p id="card-' . $i . '-check-label">' . $row["description"] . '</p>
             <div class="pf-c-content">
@@ -173,19 +175,20 @@ $i++;
 <!--  Start of Dashboard -->  
     <section id="dashboard" class="tab-panel">
 
-    <p id="dashboard" class="pf-c-title pf-m-3xl">Telescope Dashboard</p>
+    <p id="dashboard" class="pf-c-title pf-m-3xl">Telescope Dashboard </p>
+
     <section class="pf-c-page__main-section pf-m-fill">
       <div class="pf-l-gallery pf-m-gutter">
 <?php
 ## Get domains & capabilities
-$getDomains = "select domain.description, domain.id from domain;";
+$getDomains = "select domain.description, domain.id from domain ORDER BY domain.description;";
 $domainResult = pg_query($getDomains) or die('Error message: ' . pg_last_error());
 # putAperture($row['id'])
 $i = 1;
 
 while ($row = pg_fetch_assoc($domainResult)) {
 print '  
-<div class="pf-c-card pf-m-selectable-raised pf-m-compact" id="card-' . $i . '">
+<div class="pf-c-card pf-m-selectable-raised pf-m-rounded" id="card-' . $i . '">
 <div class="pf-c-card__header">';
 putAperture($row['id']);
 print '
@@ -474,9 +477,38 @@ print '
 
 <!--  Start of Add Integration Methods -->  
     <section id="methods" class="tab-panel">
+<p id="integrations" class="pf-c-title pf-m-2xl">Current Integration Methods</p>
 
+<table class="pf-c-table pf-m-grid-lg" role="grid" aria-label="This is a sortable table example" id="table-sortable">
+  <thead>
+    <tr role="row">
+      <th class="pf-c-table__sort pf-m-selected " role="columnheader" aria-sort="ascending" scope="col">
+        <button class="pf-c-table__button">
+          <div class="pf-c-table__button-content">
+            <span class="pf-c-table__text">Integration Method</span>
+          </div>
+        </button>
+      </th>     
+    </tr>
+  </thead>
+  <tbody role="rowgroup">
+<?php
+$qq = "select integration_method_name from integration_methods";
+$result = pg_query($qq) or die('Error message: ' . pg_last_error());
+
+while ($row = pg_fetch_assoc($result)) {
+print '
+    <tr role="row">
+      <td role="cell" data-label="method">' . $row['integration_method_name'] . '</td>
+    </tr>
+';
+}
+?>
+  </tbody>
+</table>
+<br>
     <p id="integrations" class="pf-c-title pf-m-2xl">Add Integration Method</p>
-<form  class="pf-c-form pf-m-horizontal" action="addIntegrationMethod.php">
+<form  class="pf-c-form" action="addIntegrationMethod.php">
   <div class="pf-c-form__group">
     <div class="pf-c-form__group-label">
       <label class="pf-c-form__label" for="horizontal-form-name">
