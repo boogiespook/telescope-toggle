@@ -113,6 +113,18 @@ if ($row['flag'] == "green") {
 	$checked = "";
 }
 
+## Check if there is an integration for the capability
+$integrationQuery = "select count(*) as total from integrations where capability_id = '" . $row['id'] . "'";
+#print $integrationQuery;
+$integrationResult = pg_query($integrationQuery) or die('Error message: ' . pg_last_error());
+$intCount = pg_fetch_assoc($integrationResult);
+#$intCount['total'];
+if ($intCount['total'] > 0) {
+$toggleClass = "toggle-capability-integration";
+} else {
+$toggleClass = "toggle-capability";
+}
+
 print '          	<div class="toggle-label"> 
 <label class="pf-c-switch" for="' . $row['id'] . '">
   <input class="pf-c-switch__input" type="checkbox" name="capability-' . $row['id'] . '" id="' . $row['id'] . '" aria-labelledby="' . $row['id'] . '-on" ' . $checked . ' />
@@ -121,7 +133,7 @@ print '          	<div class="toggle-label">
       <i class="fas fa-check" aria-hidden="true"></i>
     </span>
   </span>
-  <p class="toggle-capability">' . $row['capability'] . '</p>
+  <p class="' . $toggleClass . '">' . $row['capability'] . '</p>
   </div>
 </label>';
 }          
@@ -227,6 +239,7 @@ print "</div></div></div>";
 
 <form id="toggle" class="pf-c-form" action="updateToggle.php" >
     <p class="pf-c-title pf-m-3xl">Telescope Toggle</p>
+    <p>Items in <span class="blue">Blue</span> indicate that an integration is in place for that capability</p>
       <div class="pf-l-gallery pf-m-gutter">
 
 <!-- CHANGE TO GET DYNAMIC NAMES -->
