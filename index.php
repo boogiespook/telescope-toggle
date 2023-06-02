@@ -239,7 +239,7 @@ print "</div></div></div>";
 
 <form id="toggle" class="pf-c-form" action="updateToggle.php" >
     <p class="pf-c-title pf-m-3xl">Telescope Toggle</p>
-    <p>Items in <span class="red">RED</span> indicate that an integration is in place for that capability</p>
+    <p>Items in <span class="blue">Blue</span> indicate that an integration is in place for that capability</p>
       <div class="pf-l-gallery pf-m-gutter">
 
 <!-- CHANGE TO GET DYNAMIC NAMES -->

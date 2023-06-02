@@ -58,15 +58,15 @@
 }
 
 .toggle-capability-integration {
-	color: red;
+	color: blue;
 	margin-top: -25px;
    padding-left: 50px;
    width: 100%;
    font-weight: bold;
 }
 
-.red {
-	color: red;
+.blue {
+	color: blue;
    font-weight: bold;
 }
 
